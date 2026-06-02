@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(npx prisma *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"GET /          → %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"GET /sign-in   → %{http_code}\\\\n\" http://localhost:3000/sign-in)",
+      "Bash(curl -s -o /dev/null -w \"GET /dashboard → %{http_code} %{redirect_url}\\\\n\" http://localhost:3000/dashboard)",
+      "Bash(curl -s -o /dev/null -w \"GET /api/resumes → %{http_code}\\\\n\" http://localhost:3000/api/resumes)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/register -H 'content-type: application/json' -d '{\"name\":\"Test User\",\"email\":\"smoke@careerora.app\",\"password\":\"hunter2pass\"}' -w '\\\\n  HTTP %{http_code}\\\\n')",
+      "Bash(curl -s -N -b /tmp/c.jar -X POST http://localhost:3000/api/ai/chat -H 'content-type: application/json' -d '{\"messages\":[{\"role\":\"user\",\"content\":\"Rewrite my resume summary, please.\"}]}')",
+      "Bash(curl -s -N -b /tmp/c.jar -X POST http://localhost:3000/api/ai/generate -H 'content-type: application/json' -d '{\"kind\":\"linkedin-headline\",\"context\":\"Backend engineer, Go, 5yrs\",\"instruction\":\"Punchy\"}')",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'  Messages in DB: {len\\(d[\\\\\"messages\\\\\"]\\)}'\\)\")",
+      "Bash(curl -s -b /tmp/c.jar -o /dev/null -w \"GET /dashboard           → %{http_code}\\\\n\" http://localhost:3000/dashboard)",
+      "Bash(curl -s -b /tmp/c.jar -o /dev/null -w \"GET /dashboard/resumes   → %{http_code}\\\\n\" http://localhost:3000/dashboard/resumes)",
+      "Bash(curl -s -b /tmp/c.jar -o /dev/null -w \"GET /dashboard/portfolios → %{http_code}\\\\n\" http://localhost:3000/dashboard/portfolios)",
+      "Bash(curl -s -b /tmp/c.jar -o /dev/null -w \"GET /dashboard/assistant → %{http_code}\\\\n\" http://localhost:3000/dashboard/assistant)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('hex'\\)\\)\")"
+    ]
+  }
+}
