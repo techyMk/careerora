@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Github, Twitter, Linkedin } from "lucide-react";
 
-const NAVS = [
+const NAVS: { title: string; links: [string, string][] }[] = [
   {
     title: "Product",
     links: [
@@ -14,23 +13,20 @@ const NAVS = [
     ],
   },
   {
-    title: "Resources",
+    title: "Explore",
     links: [
-      ["Pricing", "#pricing"],
-      ["How it works", "#how-it-works"],
-      ["Blog", "#"],
-      ["Help center", "#"],
-      ["Changelog", "#"],
+      ["Features", "/#features"],
+      ["How it works", "/#how-it-works"],
+      ["Pricing", "/#pricing"],
+      ["AI Assistant", "/dashboard/assistant"],
+      ["Settings", "/dashboard/settings"],
     ],
   },
   {
-    title: "Company",
+    title: "Get started",
     links: [
-      ["About", "#"],
-      ["Careers", "#"],
-      ["Press kit", "#"],
-      ["Privacy", "#"],
-      ["Terms", "#"],
+      ["Sign up", "/sign-up"],
+      ["Sign in", "/sign-in"],
     ],
   },
 ];
@@ -54,17 +50,6 @@ export function Footer() {
               Careerora is the AI career operating system. Resumes, portfolios,
               LinkedIn, case studies — all in one tool, all on-brand.
             </p>
-            <div className="mt-5 flex items-center gap-2">
-              {[Twitter, Github, Linkedin].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="size-9 rounded-full glass flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                >
-                  <Icon className="size-4" />
-                </a>
-              ))}
-            </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -92,9 +77,7 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/40">
           <p>© {new Date().getFullYear()} Careerora. All rights reserved.</p>
-          <p>
-            Crafted with care · Made for people who refuse to look generic.
-          </p>
+          <p>Crafted with care · Made for people who refuse to look generic.</p>
         </div>
       </div>
     </footer>

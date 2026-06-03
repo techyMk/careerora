@@ -12,7 +12,6 @@ import {
   Wand2,
   LayoutTemplate,
   Settings,
-  HelpCircle,
   LogOut,
 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
@@ -98,8 +97,6 @@ export function Sidebar({
       </nav>
 
       <div className="mt-auto space-y-3">
-        <SideLink href="#" label="Help & docs" icon={HelpCircle} />
-
         <div className="flex items-center gap-2.5 p-2 rounded-xl glass">
           <div className="size-8 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold">
             {initials}

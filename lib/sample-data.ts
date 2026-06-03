@@ -41,7 +41,7 @@ export const SAMPLE_PORTFOLIO_DATA = {
       id: "p1",
       name: "Plume Analytics",
       description: "Led a 6-week redesign that lifted activation +38% and unlocked a $1.4M ARR enterprise tier.",
-      url: "https://example.com",
+      url: "",
       tags: ["Product design", "Data viz"],
     },
     {
