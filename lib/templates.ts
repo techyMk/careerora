@@ -30,7 +30,7 @@ export type Template = {
 };
 
 export const TEMPLATES: Template[] = [
-  // ─── Resume ───────────────────────────────────────────────
+  // ─── Resume (8) ───────────────────────────────────────────
   {
     id: "resume-classic",
     name: "Classic ATS",
@@ -50,6 +50,15 @@ export const TEMPLATES: Template[] = [
     swatch: ["#3B82F6", "#7C3AED"],
   },
   {
+    id: "resume-tech",
+    name: "Tech IC",
+    category: "Resume",
+    tone: "Skills-first · for engineers",
+    tier: "Free",
+    action: { kind: "resume", applyId: "modern", defaultName: "Tech IC resume" },
+    swatch: ["#06B6D4", "#3B82F6"],
+  },
+  {
     id: "resume-executive",
     name: "Executive CV",
     category: "Resume",
@@ -58,8 +67,44 @@ export const TEMPLATES: Template[] = [
     action: { kind: "resume", applyId: "executive", defaultName: "Executive CV" },
     swatch: ["#7C3AED", "#EC4899"],
   },
+  {
+    id: "resume-creative",
+    name: "Creative",
+    category: "Resume",
+    tone: "Designers, writers, marketers",
+    tier: "Pro",
+    action: { kind: "resume", applyId: "modern", defaultName: "Creative resume" },
+    swatch: ["#EC4899", "#F59E0B"],
+  },
+  {
+    id: "resume-sales",
+    name: "Sales / GTM",
+    category: "Resume",
+    tone: "Quota-led · metric-heavy",
+    tier: "Pro",
+    action: { kind: "resume", applyId: "modern", defaultName: "Sales resume" },
+    swatch: ["#10B981", "#06B6D4"],
+  },
+  {
+    id: "resume-academic",
+    name: "Academic CV",
+    category: "Resume",
+    tone: "Publications · grants · research",
+    tier: "Pro",
+    action: { kind: "resume", applyId: "executive", defaultName: "Academic CV" },
+    swatch: ["#1F2937", "#A78BFA"],
+  },
+  {
+    id: "resume-graduate",
+    name: "New Graduate",
+    category: "Resume",
+    tone: "Education-led · for first jobs",
+    tier: "Free",
+    action: { kind: "resume", applyId: "classic", defaultName: "Graduate resume" },
+    swatch: ["#3B82F6", "#06B6D4"],
+  },
 
-  // ─── Portfolio ────────────────────────────────────────────
+  // ─── Portfolio (9) ────────────────────────────────────────
   {
     id: "portfolio-minimal",
     name: "Minimal",
@@ -114,8 +159,35 @@ export const TEMPLATES: Template[] = [
     action: { kind: "portfolio", applyId: "brutalist", defaultName: "Brutalist portfolio" },
     swatch: ["#FFFFFF", "#000000"],
   },
+  {
+    id: "portfolio-editorial",
+    name: "Editorial",
+    category: "Portfolio",
+    tone: "Magazine-like · long-form",
+    tier: "Pro",
+    action: { kind: "portfolio", applyId: "minimal", defaultName: "Editorial portfolio" },
+    swatch: ["#1F2937", "#F59E0B"],
+  },
+  {
+    id: "portfolio-single",
+    name: "Single Page",
+    category: "Portfolio",
+    tone: "All-in-one · scrolly",
+    tier: "Free",
+    action: { kind: "portfolio", applyId: "gradient", defaultName: "Single-page portfolio" },
+    swatch: ["#3B82F6", "#06B6D4"],
+  },
+  {
+    id: "portfolio-agency",
+    name: "Studio / Agency",
+    category: "Portfolio",
+    tone: "Case-led · client logos",
+    tier: "Pro",
+    action: { kind: "portfolio", applyId: "luxury", defaultName: "Agency portfolio" },
+    swatch: ["#EC4899", "#7C3AED"],
+  },
 
-  // ─── Case Study ───────────────────────────────────────────
+  // ─── Case Study (5) ───────────────────────────────────────
   {
     id: "case-plume",
     name: "Plume Story",
@@ -134,8 +206,35 @@ export const TEMPLATES: Template[] = [
     action: { kind: "case-study", defaultName: "Long-form case study" },
     swatch: ["#7C3AED", "#3B82F6"],
   },
+  {
+    id: "case-data",
+    name: "Data Heavy",
+    category: "Case Study",
+    tone: "Charts · before/after metrics",
+    tier: "Pro",
+    action: { kind: "case-study", defaultName: "Data-heavy case study" },
+    swatch: ["#10B981", "#06B6D4"],
+  },
+  {
+    id: "case-startup",
+    name: "Startup MVP",
+    category: "Case Study",
+    tone: "0→1 · scrappy · founder voice",
+    tier: "Free",
+    action: { kind: "case-study", defaultName: "MVP case study" },
+    swatch: ["#F59E0B", "#EC4899"],
+  },
+  {
+    id: "case-research",
+    name: "UX Research",
+    category: "Case Study",
+    tone: "Methods · findings · insights",
+    tier: "Pro",
+    action: { kind: "case-study", defaultName: "Research case study" },
+    swatch: ["#1F2937", "#A78BFA"],
+  },
 
-  // ─── LinkedIn ─────────────────────────────────────────────
+  // ─── LinkedIn (5) ─────────────────────────────────────────
   {
     id: "linkedin-magnet",
     name: "Recruiter Magnet",
@@ -154,8 +253,35 @@ export const TEMPLATES: Template[] = [
     action: { kind: "linkedin" },
     swatch: ["#EC4899", "#F59E0B"],
   },
+  {
+    id: "linkedin-creator",
+    name: "Creator",
+    category: "LinkedIn",
+    tone: "Build-in-public · audience-first",
+    tier: "Pro",
+    action: { kind: "linkedin" },
+    swatch: ["#7C3AED", "#EC4899"],
+  },
+  {
+    id: "linkedin-jobseeker",
+    name: "Open to Work",
+    category: "LinkedIn",
+    tone: "Active search · clear ask",
+    tier: "Free",
+    action: { kind: "linkedin" },
+    swatch: ["#06B6D4", "#10B981"],
+  },
+  {
+    id: "linkedin-senior",
+    name: "Senior IC",
+    category: "LinkedIn",
+    tone: "Quiet authority · specific",
+    tier: "Pro",
+    action: { kind: "linkedin" },
+    swatch: ["#1F2937", "#3B82F6"],
+  },
 
-  // ─── Cover letter ─────────────────────────────────────────
+  // ─── Cover letter (5) ─────────────────────────────────────
   {
     id: "cover-warm",
     name: "Warm Intro",
@@ -173,6 +299,33 @@ export const TEMPLATES: Template[] = [
     tier: "Pro",
     action: { kind: "cover" },
     swatch: ["#7C3AED", "#3B82F6"],
+  },
+  {
+    id: "cover-pivot",
+    name: "Career Pivot",
+    category: "Cover letter",
+    tone: "Reframes past as relevant",
+    tier: "Pro",
+    action: { kind: "cover" },
+    swatch: ["#EC4899", "#7C3AED"],
+  },
+  {
+    id: "cover-internal",
+    name: "Internal Move",
+    category: "Cover letter",
+    tone: "For applying within your company",
+    tier: "Free",
+    action: { kind: "cover" },
+    swatch: ["#10B981", "#3B82F6"],
+  },
+  {
+    id: "cover-followup",
+    name: "Follow-up",
+    category: "Cover letter",
+    tone: "Post-interview thank-you",
+    tier: "Pro",
+    action: { kind: "cover" },
+    swatch: ["#06B6D4", "#A78BFA"],
   },
 ];
 

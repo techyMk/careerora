@@ -6,7 +6,7 @@ import {
   Linkedin,
   ScrollText,
   Eye,
-  Sparkles,
+  Wand2,
   ArrowUpRight,
   Plus,
   CheckCircle2,
@@ -274,7 +274,7 @@ export default async function DashboardHome() {
                 AI suggestions
               </h3>
               <span className="text-[10px] uppercase tracking-wider text-brand-violet">
-                <Sparkles className="inline size-3" /> {SUGGESTIONS.length} ideas
+                {SUGGESTIONS.length} ideas
               </span>
             </div>
             <p className="text-xs text-white/50">
@@ -385,7 +385,7 @@ function buildSuggestions({
     list.push({
       title: "Polish your portfolio bio with AI",
       impact: "+12% recruiter views",
-      icon: Sparkles,
+      icon: Wand2,
       href: "/dashboard/portfolios",
     });
   }

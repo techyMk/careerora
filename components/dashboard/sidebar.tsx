@@ -9,7 +9,7 @@ import {
   Globe2,
   Linkedin,
   ScrollText,
-  Sparkles,
+  Wand2,
   LayoutTemplate,
   Settings,
   HelpCircle,
@@ -44,7 +44,7 @@ export function Sidebar({
   ];
 
   const TOOLS = [
-    { href: "/dashboard/assistant", label: "AI Assistant", icon: Sparkles, badge: "New" },
+    { href: "/dashboard/assistant", label: "AI Assistant", icon: Wand2, badge: "New" },
     { href: "/dashboard/templates", label: "Templates", icon: LayoutTemplate },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
   ];

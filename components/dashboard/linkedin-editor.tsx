@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Sparkles,
   Wand2,
   Linkedin,
   Eye,
@@ -201,7 +200,7 @@ export function LinkedinEditor({
                   onClick={regenAbout}
                   disabled={genAbout}
                 >
-                  {genAbout ? <Loader2 className="size-3.5 animate-spin" /> : <Sparkles className="size-3.5" />}
+                  {genAbout ? <Loader2 className="size-3.5 animate-spin" /> : <Wand2 className="size-3.5" />}
                   Rewrite with AI
                 </Button>
                 <Button size="sm" onClick={() => copy("about", about)}>

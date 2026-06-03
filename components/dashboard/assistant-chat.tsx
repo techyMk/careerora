@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles,
   SendHorizontal,
   Wand2,
   FileText,
@@ -197,7 +196,7 @@ export function AssistantChat({
                   disabled={streaming}
                   className="text-xs px-3 py-1.5 rounded-full glass hover:bg-white/10 disabled:opacity-50"
                 >
-                  <Sparkles className="inline size-3 mr-1 text-brand-violet" />
+                  <Wand2 className="inline size-3 mr-1 text-brand-violet" />
                   {s}
                 </button>
               ))}
@@ -278,7 +277,7 @@ export function AssistantChat({
               disabled={streaming}
               className="mt-3 w-full inline-flex items-center justify-center gap-1.5 h-9 rounded-xl bg-brand-gradient text-sm font-medium shadow-glow disabled:opacity-50"
             >
-              <Sparkles className="size-3.5" />
+              <Wand2 className="size-3.5" />
               Start session
             </button>
           </div>

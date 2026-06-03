@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  Sparkles,
   FileText,
   Globe2,
   Linkedin,
@@ -171,7 +170,7 @@ function DashboardPreview({ reduce }: { reduce: boolean }) {
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="hidden md:flex items-center gap-2 px-3 h-9 rounded-full glass text-xs">
-                    <Sparkles className="size-3 text-brand-violet" />
+                    <span className="size-1.5 rounded-full bg-brand-gradient animate-pulse-soft" />
                     AI suggestions ready
                   </div>
                   <div className="size-9 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold">
@@ -222,7 +221,7 @@ function DashboardPreview({ reduce }: { reduce: boolean }) {
       >
         <div className="flex items-center gap-3">
           <div className="size-9 rounded-lg bg-brand-gradient flex items-center justify-center">
-            <Sparkles className="size-4" />
+            <Wand2 className="size-4" />
           </div>
           <div>
             <p className="text-xs text-white/50">AI tip</p>

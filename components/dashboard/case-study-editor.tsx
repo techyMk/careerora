@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Sparkles,
   Wand2,
   AlertCircle,
   Lightbulb,
@@ -203,7 +202,6 @@ export function CaseStudyEditor({
                 {data.published ? "Published" : "Draft"}
               </button>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
-                <Sparkles className="size-3 text-brand-violet" />
                 Story score {score}
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">

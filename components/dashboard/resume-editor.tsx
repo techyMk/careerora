@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles,
   Download,
   Wand2,
   Plus,
@@ -294,7 +293,7 @@ export function ResumeEditor({ user, resume }: { user: UserProp; resume: ResumeP
                     disabled={generating}
                     className="px-2.5 py-1 text-xs rounded-full bg-white/5 hover:bg-white/10 border border-white/10 disabled:opacity-50"
                   >
-                    <Sparkles className="inline size-3 mr-1 text-brand-violet" />
+                    <Wand2 className="inline size-3 mr-1 text-brand-violet" />
                     {c}
                   </button>
                 ))}

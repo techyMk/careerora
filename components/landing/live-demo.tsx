@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, SendHorizontal, FileText, Wand2 } from "lucide-react";
+import { SendHorizontal, FileText, Wand2 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
@@ -151,7 +151,7 @@ export function LiveDemo() {
                     onClick={() => run(PROMPTS[active])}
                     className="px-3 py-1.5 text-xs rounded-full glass hover:bg-white/10 transition-colors"
                   >
-                    <Sparkles className="inline size-3 mr-1 text-brand-violet" />
+                    <Wand2 className="inline size-3 mr-1 text-brand-violet" />
                     {a}
                   </button>
                 )
