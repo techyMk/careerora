@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
@@ -17,7 +18,6 @@ import {
   BarChart3,
   Briefcase,
 } from "lucide-react";
-import { Logo } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
@@ -60,9 +60,20 @@ export function Sidebar({
 
   return (
     <aside className="hidden md:flex flex-col w-[260px] shrink-0 border-r border-white/5 bg-ink-950/40 p-4 sticky top-0 h-screen">
-      <div className="px-2 py-3">
-        <Logo />
-      </div>
+      <Link
+        href="/dashboard"
+        aria-label="Careerora"
+        className="block px-2 py-3 shrink-0"
+      >
+        <Image
+          src="/careerora-logo.png"
+          alt="Careerora"
+          width={220}
+          height={56}
+          priority
+          className="h-11 md:h-12 w-auto"
+        />
+      </Link>
 
       <div className="mt-4 px-3 text-[10px] uppercase tracking-wider text-white/40">
         Workspace

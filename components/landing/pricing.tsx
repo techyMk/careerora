@@ -26,16 +26,16 @@ type Plan = {
 const PLANS: Plan[] = [
   {
     name: "Free",
-    tagline: "Get hired — at zero cost.",
+    tagline: "Build everything, share at /p/you.",
     priceMonthly: 0,
     priceYearly: 0,
     tier: "free",
     features: [
-      "1 AI resume",
-      "1 portfolio site (subdomain)",
-      "Basic ATS analyzer",
-      "PDF export",
-      "Community templates",
+      "AI resume, portfolio, case study, LinkedIn & cover letter",
+      "12 free templates across every asset type",
+      "Public portfolio at /p/your-name",
+      "Real ATS keyword scoring against any JD",
+      "Server-rendered PDF export",
     ],
   },
   {
@@ -46,12 +46,12 @@ const PLANS: Plan[] = [
     tier: "pro",
     highlight: true,
     features: [
-      "Unlimited resumes, portfolios & case studies",
-      "Advanced ATS + keyword scoring",
-      "Custom domain + analytics",
-      "Premium themes & fonts",
-      "AI writing assistant (inline)",
-      "Recruiter tracking & engagement",
+      "Everything in Free",
+      "20 premium templates unlocked",
+      "Connect a custom domain (auto SSL)",
+      "Real recruiter analytics — country, dwell, referrer",
+      "AI mock interview sessions with scored debrief",
+      "Priority AI generation",
     ],
   },
   {

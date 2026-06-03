@@ -29,6 +29,13 @@ const NAVS: { title: string; links: [string, string][] }[] = [
       ["Sign in", "/sign-in"],
     ],
   },
+  {
+    title: "Legal",
+    links: [
+      ["Terms", "/terms"],
+      ["Privacy", "/privacy"],
+    ],
+  },
 ];
 
 export function Footer() {
@@ -41,9 +48,9 @@ export function Footer() {
               <Image
                 src="/careerora-logo.png"
                 alt="Careerora"
-                width={200}
-                height={56}
-                className="h-10 md:h-11 w-auto"
+                width={260}
+                height={72}
+                className="h-12 md:h-14 w-auto"
               />
             </Link>
             <p className="mt-4 max-w-sm text-sm text-white/55">
@@ -52,7 +59,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {NAVS.map((n) => (
               <div key={n.title}>
                 <p className="text-xs uppercase tracking-wider text-white/40 font-semibold">

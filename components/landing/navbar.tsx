@@ -19,7 +19,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { status, data } = useSession();
+  const { status } = useSession();
   const isAuthed = status === "authenticated";
 
   useEffect(() => {
@@ -46,10 +46,10 @@ export function Navbar() {
           <Image
             src="/careerora-logo.png"
             alt="Careerora"
-            width={180}
-            height={48}
+            width={220}
+            height={56}
             priority
-            className="h-9 md:h-10 w-auto"
+            className="h-11 md:h-12 w-auto"
           />
         </Link>
 
