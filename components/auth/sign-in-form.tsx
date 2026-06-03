@@ -113,15 +113,23 @@ export function SignInForm({
           </Button>
         </form>
 
-        <p className="mt-4 text-center text-xs text-white/55">
-          Don&apos;t have an account?{" "}
+        <div className="mt-4 flex items-center justify-between text-xs text-white/55">
           <Link
-            href="/sign-up"
-            className="gradient-text font-medium hover:underline"
+            href="/forgot-password"
+            className="text-white/55 hover:text-white"
           >
-            Sign up free
+            Forgot password?
           </Link>
-        </p>
+          <span>
+            New here?{" "}
+            <Link
+              href="/sign-up"
+              className="gradient-text font-medium hover:underline"
+            >
+              Sign up
+            </Link>
+          </span>
+        </div>
       </div>
     </motion.div>
   );

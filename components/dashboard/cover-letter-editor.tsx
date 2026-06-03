@@ -62,7 +62,32 @@ export function CoverLetterEditor({
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const dirtyRef = useRef(false);
+
+  const exportPdf = async () => {
+    setExporting(true);
+    try {
+      if (dirtyRef.current) await save();
+      const res = await fetch(`/api/cover-letters/${letter.id}/pdf`);
+      if (!res.ok) {
+        alert("PDF generation failed. Try again in a moment.");
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const safe = title.replace(/[^a-z0-9-_]+/gi, "-").slice(0, 60) || "cover-letter";
+      a.download = `${safe}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const save = async () => {
     setSaving(true);
@@ -190,8 +215,8 @@ export function CoverLetterEditor({
               <Download className="size-3.5" />
               .txt
             </Button>
-            <Button size="sm" onClick={() => window.print()}>
-              <Download className="size-3.5" />
+            <Button size="sm" onClick={exportPdf} disabled={exporting}>
+              {exporting ? <Loader2 className="size-3.5 animate-spin" /> : <Download className="size-3.5" />}
               PDF
             </Button>
           </div>

@@ -88,12 +88,15 @@ export function AssistantChat({
         }),
       });
       if (!res.ok || !res.body) {
+        let serverMessage = "Sorry — something went wrong. Try again?";
+        if (res.status === 429) {
+          try {
+            const json = await res.clone().json();
+            if (json?.error) serverMessage = json.error;
+          } catch { /* fall through */ }
+        }
         setMessages((m) =>
-          m.map((msg) =>
-            msg.id === aiId
-              ? { ...msg, content: "Sorry — something went wrong. Try again?" }
-              : msg
-          )
+          m.map((msg) => (msg.id === aiId ? { ...msg, content: serverMessage } : msg))
         );
         return;
       }

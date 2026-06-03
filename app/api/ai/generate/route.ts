@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { requireUser, unauthorized, badRequest } from "@/lib/api-helpers";
+import { requireUser, unauthorized, badRequest, getUserPlan } from "@/lib/api-helpers";
 import { streamChat, type ChatMessage } from "@/lib/groq";
+import { rateLimitAi, rateLimited } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,10 @@ const SYSTEM_PROMPT =
 export async function POST(req: Request) {
   const user = await requireUser();
   if (!user) return unauthorized();
+
+  const plan = await getUserPlan(user.id);
+  const rate = await rateLimitAi(user.id, plan, "generate");
+  if (!rate.ok) return rateLimited(rate);
 
   let body: unknown;
   try {

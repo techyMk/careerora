@@ -26,17 +26,23 @@ model User {
   planStatus           String?   // active | trialing | past_due | canceled | unpaid
   planRenewsAt         DateTime?
   // ─────────────────────
+  // ─── Preferences (JSON blobs) ───
+  notificationPrefs    String?   // JSON: { profileViews, recruiterDMs, weeklyDigest, productUpdates }
+  brandPrefs           String?   // JSON: { primaryColor, font }
+  // ─────────────────────
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  resumes           Resume[]
-  portfolios        Portfolio[]
-  caseStudies       CaseStudy[]
-  coverLetters      CoverLetter[]
-  linkedinProfile   LinkedinProfile?
-  chatMessages      ChatMessage[]
-  notifications     Notification[]
-  interviewSessions InterviewSession[]
+  resumes             Resume[]
+  portfolios          Portfolio[]
+  caseStudies         CaseStudy[]
+  coverLetters        CoverLetter[]
+  linkedinProfile     LinkedinProfile?
+  chatMessages        ChatMessage[]
+  notifications       Notification[]
+  interviewSessions   InterviewSession[]
+  passwordResetTokens PasswordResetToken[]
+  aiUsage             AiUsage[]
 }
 
 model Resume {
@@ -86,6 +92,28 @@ model PortfolioView {
 
   @@index([portfolioId, createdAt])
   @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AiUsage {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   // "chat" | "generate" | "interview"
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model InterviewSession {

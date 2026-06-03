@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireUser, unauthorized, notFound, badRequest } from "@/lib/api-helpers";
+import { requireUser, unauthorized, notFound, badRequest, getUserPlan } from "@/lib/api-helpers";
 import { generate, type ChatMessage } from "@/lib/groq";
+import { rateLimitAi, rateLimited } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +34,9 @@ export async function GET(_req: Request, ctx: Ctx) {
 export async function POST(req: Request, ctx: Ctx) {
   const user = await requireUser();
   if (!user) return unauthorized();
+  const plan = await getUserPlan(user.id);
+  const rate = await rateLimitAi(user.id, plan, "interview");
+  if (!rate.ok) return rateLimited(rate);
   const { id } = await ctx.params;
   let body: unknown;
   try { body = await req.json(); } catch { return badRequest("Invalid JSON"); }

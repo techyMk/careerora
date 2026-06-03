@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { seedUserContent } from "@/lib/sample-data";
 import { notify } from "@/lib/notifications";
+import { sendEmail, welcomeEmail } from "@/lib/email";
 
 const schema = z.object({
   name: z.string().min(1).max(80),
@@ -50,6 +51,15 @@ export async function POST(req: Request) {
     body: "Your starter resume, portfolio and LinkedIn profile are ready in the dashboard.",
     link: "/dashboard",
   });
+
+  // Welcome email (fire-and-forget — email is best-effort)
+  const origin =
+    req.headers.get("origin") || process.env.AUTH_URL || "http://localhost:3000";
+  const tpl = welcomeEmail({
+    name: user.name ?? name,
+    dashboardUrl: `${origin}/dashboard`,
+  });
+  sendEmail({ to: user.email, ...tpl }).catch(() => {});
 
   return NextResponse.json({ ok: true, user });
 }

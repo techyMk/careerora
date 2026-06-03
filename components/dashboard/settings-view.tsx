@@ -36,7 +36,21 @@ type Profile = {
   planRenewsAt?: Date | null;
   stripeCustomerId?: string | null;
   stripeSubscriptionId?: string | null;
+  notificationPrefs?: string | null;
+  brandPrefs?: string | null;
   createdAt?: Date;
+};
+
+const DEFAULT_NOTIFICATIONS = {
+  profileViews: true,
+  recruiterDMs: true,
+  weeklyDigest: true,
+  productUpdates: false,
+};
+
+const DEFAULT_BRAND = {
+  primaryColor: "#7C3AED",
+  font: "Inter",
 };
 
 export type PaymentsConfig = {
@@ -133,9 +147,9 @@ function SettingsInner({
 
         <div className="space-y-5">
           {tab === "profile" && <ProfileTab user={user} router={router} />}
-          {tab === "brand" && <BrandTab />}
+          {tab === "brand" && <BrandTab user={user} router={router} />}
           {tab === "billing" && <BillingTab user={user} payments={payments} />}
-          {tab === "notifications" && <NotifTab />}
+          {tab === "notifications" && <NotifTab user={user} router={router} />}
           {tab === "security" && <SecurityTab />}
         </div>
       </div>
@@ -231,35 +245,94 @@ function ProfileTab({
 
 /* ──────────────── Brand ──────────────── */
 
-function BrandTab() {
+function BrandTab({
+  user,
+  router,
+}: {
+  user: Profile;
+  router: ReturnType<typeof useRouter>;
+}) {
+  let initial = DEFAULT_BRAND;
+  try {
+    if (user.brandPrefs) initial = { ...DEFAULT_BRAND, ...JSON.parse(user.brandPrefs) };
+  } catch { /* default */ }
+
+  const [primary, setPrimary] = useState(initial.primaryColor);
+  const [font, setFont] = useState(initial.font);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const save = async (next: Partial<typeof DEFAULT_BRAND>) => {
+    setSaving(true);
+    setSaved(false);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          brandPrefs: { primaryColor: primary, font, ...next },
+        }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 1500);
+        router.refresh();
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="glass rounded-2xl p-5 md:p-6">
-      <h3 className="text-sm font-semibold">Brand & theme</h3>
-      <p className="text-xs text-white/55">Defaults applied to newly-created assets.</p>
-      <div className="mt-5 grid md:grid-cols-2 gap-3">
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-sm font-semibold">Brand & theme</h3>
+          <p className="text-xs text-white/55">Defaults applied to newly-created assets.</p>
+        </div>
+        {saving && <Loader2 className="size-3.5 animate-spin text-white/40" />}
+        {saved && (
+          <span className="text-xs text-emerald-300 inline-flex items-center gap-1">
+            <Check className="size-3.5" /> Saved
+          </span>
+        )}
+      </div>
+      <div className="mt-5 grid md:grid-cols-2 gap-5">
         <div>
           <span className="text-[10px] uppercase tracking-wider text-white/45">Primary color</span>
-          <div className="mt-1 flex items-center gap-2">
-            {["#3B82F6", "#7C3AED", "#EC4899", "#06B6D4", "#10B981"].map((c, i) => (
+          <div className="mt-2 flex items-center gap-2">
+            {["#3B82F6", "#7C3AED", "#EC4899", "#06B6D4", "#10B981", "#F59E0B"].map((c) => (
               <button
                 key={c}
-                className={cn("size-7 rounded-full ring-2", i === 1 ? "ring-white" : "ring-white/20")}
+                onClick={() => {
+                  setPrimary(c);
+                  save({ primaryColor: c });
+                }}
+                className={cn(
+                  "size-7 rounded-full ring-2 transition-all",
+                  primary === c ? "ring-white scale-110" : "ring-white/15 hover:ring-white/40"
+                )}
                 style={{ background: c }}
+                aria-label={c}
               />
             ))}
           </div>
         </div>
         <div>
           <span className="text-[10px] uppercase tracking-wider text-white/45">Font</span>
-          <div className="mt-1 flex flex-wrap gap-1.5">
-            {["Inter", "Satoshi", "Geist", "Manrope"].map((f, i) => (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {["Inter", "Satoshi", "Geist", "Manrope"].map((f) => (
               <button
                 key={f}
+                onClick={() => {
+                  setFont(f);
+                  save({ font: f });
+                }}
                 className={cn(
-                  "text-xs px-2.5 py-1 rounded-full border",
-                  i === 0
+                  "text-xs px-2.5 py-1 rounded-full border transition-colors",
+                  font === f
                     ? "bg-brand-gradient-soft border-brand-violet/30"
-                    : "border-white/10 text-white/65"
+                    : "border-white/10 text-white/65 hover:text-white"
                 )}
               >
                 {f}
@@ -268,6 +341,9 @@ function BrandTab() {
           </div>
         </div>
       </div>
+      <p className="mt-5 text-[11px] text-white/40">
+        Saved instantly. Applied to new resumes, portfolios and case studies as they&apos;re created.
+      </p>
     </div>
   );
 }
@@ -572,24 +648,98 @@ function PlanCard({
 
 /* ──────────────── Notifications / Security ──────────────── */
 
-function NotifTab() {
+function NotifTab({
+  user,
+  router,
+}: {
+  user: Profile;
+  router: ReturnType<typeof useRouter>;
+}) {
+  let initial = DEFAULT_NOTIFICATIONS;
+  try {
+    if (user.notificationPrefs) {
+      initial = { ...DEFAULT_NOTIFICATIONS, ...JSON.parse(user.notificationPrefs) };
+    }
+  } catch { /* default */ }
+
+  const [prefs, setPrefs] = useState(initial);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const toggle = async (key: keyof typeof DEFAULT_NOTIFICATIONS) => {
+    const next = { ...prefs, [key]: !prefs[key] };
+    setPrefs(next);
+    setSaving(true);
+    setSaved(false);
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ notificationPrefs: next }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 1500);
+        router.refresh();
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const ROWS: { id: keyof typeof DEFAULT_NOTIFICATIONS; label: string; sub: string }[] = [
+    { id: "profileViews", label: "Profile views", sub: "When someone views your published portfolio." },
+    { id: "recruiterDMs", label: "Recruiter activity", sub: "High-engagement views with strong dwell time." },
+    { id: "weeklyDigest", label: "Weekly digest", sub: "Career-score recap every Monday morning." },
+    { id: "productUpdates", label: "Product updates", sub: "New features, templates and AI improvements." },
+  ];
+
   return (
     <div className="glass rounded-2xl p-5 md:p-6">
-      <h3 className="text-sm font-semibold">Notifications</h3>
-      <div className="mt-4 space-y-2">
-        {[
-          ["Profile views", true],
-          ["New recruiter DMs", true],
-          ["Weekly score digest", true],
-          ["Product updates", false],
-        ].map(([l, on]) => (
-          <div key={l as string} className="flex items-center justify-between py-2">
-            <span className="text-sm">{l as string}</span>
-            <Toggle defaultOn={on as boolean} />
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-sm font-semibold">Notifications</h3>
+          <p className="text-xs text-white/55">In-app and email preferences.</p>
+        </div>
+        {saving && <Loader2 className="size-3.5 animate-spin text-white/40" />}
+        {saved && (
+          <span className="text-xs text-emerald-300 inline-flex items-center gap-1">
+            <Check className="size-3.5" /> Saved
+          </span>
+        )}
+      </div>
+      <div className="mt-4 divide-y divide-white/5">
+        {ROWS.map((r) => (
+          <div key={r.id} className="flex items-start justify-between py-3 gap-3">
+            <div className="min-w-0">
+              <p className="text-sm">{r.label}</p>
+              <p className="text-xs text-white/55 mt-0.5">{r.sub}</p>
+            </div>
+            <ControlledToggle on={prefs[r.id]} onChange={() => toggle(r.id)} />
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+function ControlledToggle({ on, onChange }: { on: boolean; onChange: () => void }) {
+  return (
+    <button
+      onClick={onChange}
+      className={cn(
+        "relative w-10 h-6 rounded-full transition-colors shrink-0",
+        on ? "bg-brand-gradient" : "bg-white/10"
+      )}
+      aria-pressed={on}
+    >
+      <span
+        className={cn(
+          "absolute top-0.5 size-5 rounded-full bg-white shadow-soft transition-all",
+          on ? "left-[18px]" : "left-0.5"
+        )}
+      />
+    </button>
   );
 }
 

@@ -19,6 +19,8 @@ export async function GET() {
       phone: true,
       bio: true,
       plan: true,
+      notificationPrefs: true,
+      brandPrefs: true,
       createdAt: true,
     },
   });
@@ -32,6 +34,22 @@ const schema = z.object({
   website: z.string().max(200).optional(),
   phone: z.string().max(40).optional(),
   bio: z.string().max(2000).optional(),
+  notificationPrefs: z
+    .object({
+      profileViews: z.boolean(),
+      recruiterDMs: z.boolean(),
+      weeklyDigest: z.boolean(),
+      productUpdates: z.boolean(),
+    })
+    .partial()
+    .optional(),
+  brandPrefs: z
+    .object({
+      primaryColor: z.string().max(20),
+      font: z.string().max(40),
+    })
+    .partial()
+    .optional(),
 });
 
 export async function PUT(req: Request) {
@@ -46,9 +64,19 @@ export async function PUT(req: Request) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return badRequest("Invalid input");
 
+  const { notificationPrefs, brandPrefs, ...rest } = parsed.data;
+
   const profile = await prisma.user.update({
     where: { id: user.id },
-    data: parsed.data,
+    data: {
+      ...rest,
+      notificationPrefs:
+        notificationPrefs !== undefined
+          ? JSON.stringify(notificationPrefs)
+          : undefined,
+      brandPrefs:
+        brandPrefs !== undefined ? JSON.stringify(brandPrefs) : undefined,
+    },
     select: {
       id: true,
       email: true,
@@ -60,6 +88,8 @@ export async function PUT(req: Request) {
       phone: true,
       bio: true,
       plan: true,
+      notificationPrefs: true,
+      brandPrefs: true,
     },
   });
   return NextResponse.json({ profile });

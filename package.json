@@ -28,7 +28,8 @@
     "zod": "^3.24.1",
     "groq-sdk": "^0.9.1",
     "stripe": "^17.5.0",
-    "@react-pdf/renderer": "^4.1.6"
+    "@react-pdf/renderer": "^4.1.6",
+    "resend": "^4.0.1"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
