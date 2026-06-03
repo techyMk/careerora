@@ -2,32 +2,122 @@ import type { PrismaClient } from "@prisma/client";
 
 export const SAMPLE_RESUME_DATA = {
   summary:
-    "Senior product builder with 5+ years shipping data-rich SaaS. Recently led a redesign that lifted activation +38% and unlocked an enterprise tier.",
-  skills: ["Product design", "Design systems", "Figma", "Webflow", "Motion", "Research"],
+    "Senior product builder with 6+ years shipping data-rich SaaS. Recently led an analytics redesign at Plume that lifted activation +38% and unlocked a $1.4M ARR enterprise tier. I care about clear thinking, type-led layouts, and motion that explains — not decorates.",
+  skills: [
+    "Product design",
+    "Design systems",
+    "Figma",
+    "Webflow",
+    "Motion",
+    "Research",
+    "Prototyping",
+    "User testing",
+    "Information architecture",
+    "Brand",
+  ],
   experience: [
     {
-      id: "1",
+      id: "exp-1",
       role: "Senior Designer",
       company: "Plume",
+      location: "Remote",
       period: "2023 — Present",
       bullets: [
         "Led end-to-end analytics redesign — +38% activation, −41% support tickets.",
         "Shipped a token-driven design system adopted by 4 product teams.",
+        "Owned the brand refresh: new wordmark, motion language, and marketing site.",
       ],
     },
     {
-      id: "2",
+      id: "exp-2",
       role: "Product Designer",
       company: "Foundry",
+      location: "New York, NY",
       period: "2020 — 2023",
       bullets: [
-        "Designed onboarding flows that improved trial → paid 22% → 31%.",
+        "Designed onboarding flows that improved trial → paid conversion 22% → 31%.",
         "Partnered with research on weekly tests with 250+ users.",
+        "Mentored 2 junior designers and led the design hiring loop.",
+      ],
+    },
+    {
+      id: "exp-3",
+      role: "Junior Designer",
+      company: "Northwind Studio",
+      location: "Brooklyn, NY",
+      period: "2018 — 2020",
+      bullets: [
+        "Designed marketing sites for 12 early-stage clients.",
+        "Built and maintained the studio's component library in Figma.",
       ],
     },
   ],
   education: [
-    { school: "Pratt Institute", degree: "BFA Communications Design", period: "2014 — 2018" },
+    {
+      id: "edu-1",
+      school: "Pratt Institute",
+      degree: "BFA Communications Design",
+      period: "2014 — 2018",
+      details: "Magna Cum Laude · GPA 3.8 / 4.0",
+    },
+  ],
+  projects: [
+    {
+      id: "proj-1",
+      name: "Plume Analytics 2.0",
+      description:
+        "Re-architected the analytics suite around 3 focal jobs with progressive disclosure.",
+      tech: "Figma · Webflow · React",
+      url: "",
+    },
+    {
+      id: "proj-2",
+      name: "Northwind brand system",
+      description:
+        "New wordmark, motion language and marketing site shipped in 4 weeks.",
+      tech: "Illustrator · After Effects · Webflow",
+      url: "",
+    },
+  ],
+  certifications: [
+    {
+      id: "cert-1",
+      name: "Google UX Design Professional Certificate",
+      issuer: "Google",
+      date: "2022",
+      url: "",
+    },
+    {
+      id: "cert-2",
+      name: "Nielsen Norman UX Certification",
+      issuer: "NN/g",
+      date: "2021",
+      url: "",
+    },
+  ],
+  awards: [
+    {
+      id: "awd-1",
+      name: "Awwwards Site of the Day",
+      issuer: "Awwwards",
+      date: "2024",
+    },
+    {
+      id: "awd-2",
+      name: "Design+Code Best of Year",
+      issuer: "Design+Code",
+      date: "2023",
+    },
+  ],
+  languages: [
+    { id: "lang-1", name: "English", level: "Native" },
+    { id: "lang-2", name: "Hindi", level: "Native" },
+    { id: "lang-3", name: "Spanish", level: "Conversational" },
+  ],
+  links: [
+    { id: "lnk-1", label: "Portfolio", url: "maya.design" },
+    { id: "lnk-2", label: "LinkedIn", url: "linkedin.com/in/maya" },
+    { id: "lnk-3", label: "Read.cv", url: "read.cv/maya" },
   ],
 };
 
