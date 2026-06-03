@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import type Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { stripe, planFromPriceId } from "@/lib/stripe";
+import { notify } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -40,16 +41,23 @@ export async function POST(req: Request) {
           const priceId = sub.items.data[0]?.price.id;
           const periodEnd = (sub as unknown as { current_period_end?: number })
             .current_period_end;
+          const plan = planFromPriceId(priceId);
           await prisma.user.update({
             where: { id: userId },
             data: {
               stripeCustomerId: customerId,
               stripeSubscriptionId: subId,
-              plan: planFromPriceId(priceId),
+              plan,
               planStatus: sub.status,
               planRenewsAt: periodEnd ? new Date(periodEnd * 1000) : null,
             },
           });
+          notify(userId, {
+            type: "plan_change",
+            title: `Welcome to Careerora ${plan === "pro" ? "Pro" : plan === "teams" ? "Teams" : ""} 🎉`,
+            body: "All premium templates and unlimited assets unlocked.",
+            link: "/dashboard/settings?tab=billing",
+          }).catch(() => {});
         }
         break;
       }
@@ -94,6 +102,15 @@ export async function POST(req: Request) {
           where: { stripeCustomerId: customerId },
           data: { planStatus: "past_due" },
         });
+        const u = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } });
+        if (u) {
+          notify(u.id, {
+            type: "plan_change",
+            title: "Payment failed — update your card",
+            body: "We couldn't process your latest invoice. Update your card to keep Pro active.",
+            link: "/dashboard/settings?tab=billing",
+          }).catch(() => {});
+        }
         break;
       }
     }

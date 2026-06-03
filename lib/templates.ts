@@ -288,7 +288,7 @@ export const TEMPLATES: Template[] = [
     category: "Cover letter",
     tone: "Conversational · friendly",
     tier: "Free",
-    action: { kind: "cover" },
+    action: { kind: "cover", applyId: "warm", defaultName: "Warm intro letter" },
     swatch: ["#F59E0B", "#EC4899"],
   },
   {
@@ -297,7 +297,7 @@ export const TEMPLATES: Template[] = [
     category: "Cover letter",
     tone: "Confident · concise · execs",
     tier: "Pro",
-    action: { kind: "cover" },
+    action: { kind: "cover", applyId: "senior", defaultName: "Senior tone letter" },
     swatch: ["#7C3AED", "#3B82F6"],
   },
   {
@@ -306,7 +306,7 @@ export const TEMPLATES: Template[] = [
     category: "Cover letter",
     tone: "Reframes past as relevant",
     tier: "Pro",
-    action: { kind: "cover" },
+    action: { kind: "cover", applyId: "pivot", defaultName: "Career pivot letter" },
     swatch: ["#EC4899", "#7C3AED"],
   },
   {
@@ -315,7 +315,7 @@ export const TEMPLATES: Template[] = [
     category: "Cover letter",
     tone: "For applying within your company",
     tier: "Free",
-    action: { kind: "cover" },
+    action: { kind: "cover", applyId: "internal", defaultName: "Internal move letter" },
     swatch: ["#10B981", "#3B82F6"],
   },
   {
@@ -324,7 +324,7 @@ export const TEMPLATES: Template[] = [
     category: "Cover letter",
     tone: "Post-interview thank-you",
     tier: "Pro",
-    action: { kind: "cover" },
+    action: { kind: "cover", applyId: "followup", defaultName: "Follow-up letter" },
     swatch: ["#06B6D4", "#A78BFA"],
   },
 ];

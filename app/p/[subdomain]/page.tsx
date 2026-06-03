@@ -67,6 +67,16 @@ export default async function PublicPortfolioPage({
     prisma.portfolio
       .update({ where: { id: portfolio.id }, data: { views: { increment: 1 } } })
       .catch(() => {});
+    // Notify the owner (debounce naive: only on every Nth view)
+    if ((portfolio.views + 1) % 5 === 1) {
+      const { notify } = await import("@/lib/notifications");
+      notify(portfolio.userId, {
+        type: "portfolio_view",
+        title: `Someone viewed your portfolio`,
+        body: `${portfolio.name} just hit ${portfolio.views + 1} total views.`,
+        link: `/dashboard/portfolios/${portfolio.id}`,
+      }).catch(() => {});
+    }
   }
 
   return (

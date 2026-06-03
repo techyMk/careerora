@@ -57,18 +57,14 @@ export function TemplatesGallery({
         router.push("/dashboard/linkedin");
         return;
       }
-      if (t.action.kind === "cover") {
-        // No cover-letter editor yet — drop the user into the assistant
-        // pre-seeded with cover-letter intent.
-        router.push("/dashboard/assistant");
-        return;
-      }
       const endpoint =
         t.action.kind === "resume"
           ? "/api/resumes"
           : t.action.kind === "portfolio"
             ? "/api/portfolios"
-            : "/api/case-studies";
+            : t.action.kind === "case-study"
+              ? "/api/case-studies"
+              : "/api/cover-letters";
 
       const body: Record<string, string> = {
         name: t.action.defaultName ?? t.name,
@@ -82,6 +78,10 @@ export function TemplatesGallery({
       if (t.action.kind === "case-study") {
         body.title = t.action.defaultName ?? t.name;
       }
+      if (t.action.kind === "cover") {
+        body.title = t.action.defaultName ?? t.name;
+        if (t.action.applyId) body.tone = t.action.applyId;
+      }
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -90,14 +90,19 @@ export function TemplatesGallery({
       });
       const json = await res.json();
       const id =
-        json?.resume?.id ?? json?.portfolio?.id ?? json?.study?.id;
+        json?.resume?.id ??
+        json?.portfolio?.id ??
+        json?.study?.id ??
+        json?.letter?.id;
       if (!id) return;
       const path =
         t.action.kind === "resume"
           ? `/dashboard/resumes/${id}`
           : t.action.kind === "portfolio"
             ? `/dashboard/portfolios/${id}`
-            : `/dashboard/case-studies/${id}`;
+            : t.action.kind === "case-study"
+              ? `/dashboard/case-studies/${id}`
+              : `/dashboard/cover-letters/${id}`;
       router.push(path);
       router.refresh();
     } finally {

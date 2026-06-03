@@ -19,6 +19,8 @@ import {
   ArrowLeft,
   ChevronDown,
   ChevronRight,
+  Target,
+  X,
 } from "lucide-react";
 import { Topbar } from "@/components/dashboard/topbar";
 import { Button } from "@/components/ui/button";
@@ -125,7 +127,61 @@ export function ResumeEditor({ user, resume }: { user: UserProp; resume: ResumeP
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [atsOpen, setAtsOpen] = useState(false);
+  const [jd, setJd] = useState("");
+  const [analysis, setAnalysis] = useState<null | {
+    score: number;
+    matched: string[];
+    missing: string[];
+    jdKeywords: { word: string; freq: number }[];
+    resumeWordCount: number;
+    jdWordCount: number;
+  }>(null);
+  const [analyzing, setAnalyzing] = useState(false);
   const dirtyRef = useRef(false);
+
+  const runAtsMatch = async () => {
+    if (!jd.trim()) return;
+    setAnalyzing(true);
+    try {
+      if (dirtyRef.current) await save();
+      const res = await fetch(`/api/resumes/${resume.id}/ats`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jobDescription: jd }),
+      });
+      const json = await res.json();
+      if (json?.analysis) setAnalysis(json.analysis);
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const exportPdf = async () => {
+    setExporting(true);
+    try {
+      // make sure the latest edits are saved before the server renders the PDF
+      if (dirtyRef.current) await save();
+      const res = await fetch(`/api/resumes/${resume.id}/pdf`);
+      if (!res.ok) {
+        alert("PDF generation failed. Try again in a moment.");
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const safe = name.replace(/[^a-z0-9-_]+/gi, "-").slice(0, 60) || "resume";
+      a.download = `${safe}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const computeAts = useCallback((d: ResumeData) => {
     let s = 30;
@@ -357,8 +413,8 @@ export function ResumeEditor({ user, resume }: { user: UserProp; resume: ResumeP
               {deleting ? <Loader2 className="size-3.5 animate-spin" /> : <Trash2 className="size-3.5" />}
               Delete
             </Button>
-            <Button size="sm" variant="secondary" onClick={() => window.print()}>
-              <Download className="size-3.5" />
+            <Button size="sm" variant="secondary" onClick={exportPdf} disabled={exporting}>
+              {exporting ? <Loader2 className="size-3.5 animate-spin" /> : <Download className="size-3.5" />}
               Export PDF
             </Button>
           </div>
@@ -570,7 +626,11 @@ export function ResumeEditor({ user, resume }: { user: UserProp; resume: ResumeP
                 ))}
               </div>
               <div className="flex items-center gap-2">
-                <div className="inline-flex items-center gap-2 px-3 h-9 rounded-full glass text-xs">
+                <button
+                  onClick={() => setAtsOpen((v) => !v)}
+                  className="inline-flex items-center gap-2 px-3 h-9 rounded-full glass text-xs hover:bg-white/[0.06] transition-colors"
+                  title="Match against a job description"
+                >
                   <Gauge className="size-3.5 text-brand-violet" />
                   ATS{" "}
                   <span
@@ -582,12 +642,110 @@ export function ResumeEditor({ user, resume }: { user: UserProp; resume: ResumeP
                     {atsScore}
                   </span>{" "}
                   / 100
-                </div>
+                  <Target className="size-3 text-white/40" />
+                </button>
                 <div className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full glass text-xs text-white/55">
                   {saving ? <><Loader2 className="size-3 animate-spin" /> Saving</> : <><Check className="size-3 text-emerald-400" /> Saved</>}
                 </div>
               </div>
             </div>
+
+            {atsOpen && (
+              <div className="glass rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold inline-flex items-center gap-2">
+                      <Target className="size-4 text-brand-violet" />
+                      Match against a job description
+                    </h3>
+                    <p className="text-xs text-white/55 mt-0.5">
+                      Paste a JD — we extract the keywords recruiters scan for and tell you what&apos;s missing from your resume.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setAtsOpen(false)}
+                    className="size-7 rounded-full glass flex items-center justify-center hover:bg-white/10"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                </div>
+                <textarea
+                  value={jd}
+                  onChange={(e) => setJd(e.target.value)}
+                  rows={6}
+                  placeholder="Paste the job description here…"
+                  className="w-full rounded-xl bg-white/[0.02] border border-white/10 p-3 text-sm outline-none focus:border-brand-violet/50 resize-none"
+                />
+                <Button size="sm" onClick={runAtsMatch} disabled={analyzing || !jd.trim()}>
+                  {analyzing ? <Loader2 className="size-3.5 animate-spin" /> : <Target className="size-3.5" />}
+                  Analyze match
+                </Button>
+
+                {analysis && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-baseline gap-3">
+                      <span
+                        className={cn(
+                          "text-3xl font-semibold gradient-text",
+                          analysis.score >= 80 ? "" : analysis.score >= 60 ? "" : "text-rose-300"
+                        )}
+                      >
+                        {analysis.score}
+                      </span>
+                      <span className="text-xs text-white/55">
+                        match · {analysis.matched.length}/{analysis.matched.length + analysis.missing.length} keywords found
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                      <div
+                        className="h-full bg-brand-gradient transition-all"
+                        style={{ width: `${analysis.score}%` }}
+                      />
+                    </div>
+
+                    {analysis.matched.length > 0 && (
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider text-emerald-300 font-semibold mb-1.5">
+                          ✓ Matched ({analysis.matched.length})
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {analysis.matched.map((k) => (
+                            <span
+                              key={k}
+                              className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-200"
+                            >
+                              {k}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysis.missing.length > 0 && (
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider text-rose-300 font-semibold mb-1.5">
+                          ✗ Missing — consider adding ({analysis.missing.length})
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {analysis.missing.map((k) => (
+                            <span
+                              key={k}
+                              className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-200"
+                            >
+                              {k}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <p className="text-[10px] text-white/40">
+                      Heuristic match — covers the top {analysis.jdKeywords.length} keywords from the JD. Mention missing terms naturally where they apply to your work, never stuff them.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div id="resume-print" className="relative gradient-border rounded-3xl glass-strong p-3 md:p-4 shadow-soft">
               <AnimatePresence mode="wait">

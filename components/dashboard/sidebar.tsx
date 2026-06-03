@@ -9,6 +9,7 @@ import {
   Globe2,
   Linkedin,
   ScrollText,
+  Mail,
   Wand2,
   LayoutTemplate,
   Settings,
@@ -31,7 +32,7 @@ export function Sidebar({
   counts,
 }: {
   user: SidebarUser;
-  counts: { resumes: number; portfolios: number };
+  counts: { resumes: number; portfolios: number; coverLetters: number };
 }) {
   const pathname = usePathname();
 
@@ -41,6 +42,7 @@ export function Sidebar({
     { href: "/dashboard/portfolios", label: "Portfolios", icon: Globe2, count: counts.portfolios },
     { href: "/dashboard/linkedin", label: "LinkedIn", icon: Linkedin },
     { href: "/dashboard/case-studies", label: "Case Studies", icon: ScrollText },
+    { href: "/dashboard/cover-letters", label: "Cover Letters", icon: Mail, count: counts.coverLetters },
   ];
 
   const TOOLS = [

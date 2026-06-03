@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { seedUserContent } from "@/lib/sample-data";
+import { notify } from "@/lib/notifications";
 
 const schema = z.object({
   name: z.string().min(1).max(80),
@@ -43,6 +44,12 @@ export async function POST(req: Request) {
   });
 
   await seedUserContent(prisma, user);
+  await notify(user.id, {
+    type: "system",
+    title: "Welcome to Careerora 👋",
+    body: "Your starter resume, portfolio and LinkedIn profile are ready in the dashboard.",
+    link: "/dashboard",
+  });
 
   return NextResponse.json({ ok: true, user });
 }
