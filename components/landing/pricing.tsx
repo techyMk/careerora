@@ -190,7 +190,7 @@ export function Pricing() {
                 )}
               >
                 {p.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-brand-gradient text-xs font-semibold shadow-glow">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-brand-gradient text-xs font-semibold shadow-glow ring-4 ring-ink-950">
                     Most popular
                   </div>
                 )}
