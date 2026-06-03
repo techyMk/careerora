@@ -226,7 +226,7 @@ function DashboardPreview({ reduce }: { reduce: boolean }) {
           </div>
           <div>
             <p className="text-xs text-white/50">AI tip</p>
-            <p className="text-sm">Quantify impact with metrics ✨</p>
+            <p className="text-sm">Quantify impact with metrics</p>
           </div>
         </div>
       </FloatingCard>

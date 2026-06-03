@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function FinalCta() {
@@ -22,7 +22,7 @@ export function FinalCta() {
 
           <div className="relative glass-strong p-10 md:p-16 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-white/80">
-              <Sparkles className="size-3.5 text-brand-violet" />
+              <span className="size-1.5 rounded-full bg-brand-gradient animate-pulse-soft" />
               The future of how you present yourself
             </div>
             <h2 className="mt-5 text-3xl md:text-6xl font-semibold tracking-tight text-balance leading-[1.05]">

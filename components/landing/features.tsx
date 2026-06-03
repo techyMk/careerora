@@ -11,7 +11,6 @@ import {
   Gauge,
   Download,
   Rocket,
-  Sparkles,
 } from "lucide-react";
 import { Section, SectionHeader } from "@/components/ui/section";
 
@@ -144,7 +143,6 @@ function FeatureCard({
         </div>
         {badge && (
           <span className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">
-            <Sparkles className="inline size-3 mr-1" />
             {badge}
           </span>
         )}

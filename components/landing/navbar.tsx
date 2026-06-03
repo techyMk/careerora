@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, ArrowRight, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -18,6 +19,8 @@ const NAV_LINKS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { status, data } = useSession();
+  const isAuthed = status === "authenticated";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -36,12 +39,20 @@ export function Navbar() {
       <nav
         className={cn(
           "w-[min(96%,1100px)] flex items-center justify-between gap-4 px-3 md:px-4 py-2.5 rounded-full transition-all duration-300",
-          scrolled
-            ? "glass-strong shadow-soft"
-            : "glass"
+          scrolled ? "glass-strong shadow-soft" : "glass"
         )}
       >
-        <Logo />
+        <Link href="/" aria-label="Careerora" className="shrink-0 flex items-center pl-2">
+          <Image
+            src="/careerora-logo.png"
+            alt="Careerora"
+            width={180}
+            height={48}
+            priority
+            className="h-9 md:h-10 w-auto"
+          />
+        </Link>
+
         <ul className="hidden md:flex items-center gap-1 text-sm">
           {NAV_LINKS.map((l) => (
             <li key={l.href}>
@@ -54,17 +65,42 @@ export function Navbar() {
             </li>
           ))}
         </ul>
+
         <div className="hidden md:flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/sign-in">Sign in</Link>
-          </Button>
-          <Button asChild size="sm" className="group">
-            <Link href="/sign-up">
-              <Sparkles className="size-3.5" />
-              Start free
-            </Link>
-          </Button>
+          {isAuthed ? (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                  className="inline-flex items-center gap-1.5"
+                >
+                  <LogOut className="size-3.5" />
+                  Sign out
+                </button>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/dashboard">
+                  <LayoutDashboard className="size-3.5" />
+                  Dashboard
+                </Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/sign-up">
+                  Start free
+                  <ArrowRight className="size-3.5" />
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
+
         <button
           aria-label="Toggle menu"
           className="md:hidden inline-flex items-center justify-center size-9 rounded-full glass"
@@ -73,6 +109,7 @@ export function Navbar() {
           {open ? <X className="size-4" /> : <Menu className="size-4" />}
         </button>
       </nav>
+
       <AnimatePresence>
         {open && (
           <motion.div
@@ -95,9 +132,22 @@ export function Navbar() {
               ))}
               <li className="mt-2">
                 <Button asChild className="w-full">
-                  <Link href="/sign-up">Start free</Link>
+                  <Link href={isAuthed ? "/dashboard" : "/sign-up"}>
+                    {isAuthed ? "Open dashboard" : "Start free"}
+                  </Link>
                 </Button>
               </li>
+              {isAuthed && (
+                <li className="mt-2">
+                  <Button
+                    variant="ghost"
+                    className="w-full"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                  >
+                    Sign out
+                  </Button>
+                </li>
+              )}
             </ul>
           </motion.div>
         )}

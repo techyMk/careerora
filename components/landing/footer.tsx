@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Github, Twitter, Linkedin } from "lucide-react";
-import { Logo } from "@/components/brand/logo";
 
 const NAVS = [
   {
@@ -41,7 +41,15 @@ export function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-[1.2fr_2fr] gap-10">
           <div>
-            <Logo />
+            <Link href="/" aria-label="Careerora" className="inline-flex">
+              <Image
+                src="/careerora-logo.png"
+                alt="Careerora"
+                width={200}
+                height={56}
+                className="h-10 md:h-11 w-auto"
+              />
+            </Link>
             <p className="mt-4 max-w-sm text-sm text-white/55">
               Careerora is the AI career operating system. Resumes, portfolios,
               LinkedIn, case studies — all in one tool, all on-brand.
