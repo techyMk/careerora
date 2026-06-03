@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
 
 export function Topbar({
   title,
@@ -11,15 +12,13 @@ export function Topbar({
 }: {
   title: string;
   subtitle?: string;
-  user?: { name?: string | null; email?: string | null } | null;
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    avatar?: string | null;
+  } | null;
 }) {
   const router = useRouter();
-  const initials = (user?.name || user?.email || "U")
-    .split(/\s+/)
-    .map((s) => s[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <header className="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/60 border-b border-white/5">
@@ -44,10 +43,15 @@ export function Topbar({
           </Button>
           <button
             onClick={() => router.push("/dashboard/settings")}
-            className="size-9 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold hover:scale-105 transition-transform"
+            className="rounded-full hover:scale-105 transition-transform"
             title="Account settings"
           >
-            {initials}
+            <Avatar
+              src={user?.avatar}
+              name={user?.name}
+              email={user?.email}
+              size={36}
+            />
           </button>
         </div>
       </div>

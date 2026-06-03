@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import { Topbar } from "@/components/dashboard/topbar";
 import { Button } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 type Profile = {
   id: string;
   email: string;
   name?: string | null;
+  avatar?: string | null;
   headline?: string | null;
   location?: string | null;
   website?: string | null;
@@ -180,13 +182,6 @@ function ProfileTab({
     }
   };
 
-  const initials = (form.name || user.email)
-    .split(/\s+/)
-    .map((s) => s[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
   return (
     <div className="glass rounded-2xl p-5 md:p-6">
       <h3 className="text-sm font-semibold">Profile</h3>
@@ -194,9 +189,7 @@ function ProfileTab({
         Your public identity across all Careerora assets.
       </p>
       <div className="mt-5 flex items-center gap-4">
-        <div className="size-16 rounded-full bg-brand-gradient flex items-center justify-center text-base font-semibold">
-          {initials}
-        </div>
+        <Avatar src={user.avatar} name={form.name} email={user.email} size={64} />
         <div>
           <p className="text-sm font-medium">{user.email}</p>
           <p className="text-xs text-white/45 capitalize">

@@ -31,7 +31,7 @@ export default async function DashboardHome() {
     await Promise.all([
       prisma.user.findUnique({
         where: { id: sessionUser.id },
-        select: { name: true, email: true, headline: true },
+        select: { name: true, email: true, avatar: true, headline: true },
       }),
       prisma.resume.findMany({
         where: { userId: sessionUser.id },

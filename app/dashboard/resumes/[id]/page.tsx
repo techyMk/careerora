@@ -22,6 +22,7 @@ export default async function ResumeEditPage({
       select: {
         name: true,
         email: true,
+        avatar: true,
         headline: true,
         location: true,
         website: true,

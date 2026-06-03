@@ -18,7 +18,7 @@ export default async function PortfoliosListPage() {
   const [user, portfolios] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true },
+      select: { name: true, email: true, avatar: true },
     }),
     prisma.portfolio.findMany({
       where: { userId: sessionUser.id },

@@ -17,6 +17,7 @@ export default async function SettingsPage() {
       id: true,
       email: true,
       name: true,
+      avatar: true,
       headline: true,
       location: true,
       website: true,

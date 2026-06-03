@@ -12,7 +12,7 @@ export default async function TemplatesPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: sessionUser.id },
-    select: { name: true, email: true, plan: true },
+    select: { name: true, email: true, avatar: true, plan: true },
   });
   if (!user) redirect("/sign-in");
 

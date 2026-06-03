@@ -20,7 +20,7 @@ export default async function PortfolioEditPage({
   const [user, portfolio] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true, headline: true },
+      select: { name: true, email: true, avatar: true, headline: true },
     }),
     prisma.portfolio.findFirst({
       where: { id, userId: sessionUser.id },

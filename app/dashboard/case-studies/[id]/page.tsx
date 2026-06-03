@@ -18,7 +18,7 @@ export default async function CaseStudyEditPage({
   const [user, study] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true },
+      select: { name: true, email: true, avatar: true },
     }),
     prisma.caseStudy.findFirst({ where: { id, userId: sessionUser.id } }),
   ]);

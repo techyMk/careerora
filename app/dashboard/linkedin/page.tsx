@@ -13,7 +13,7 @@ export default async function LinkedinPage() {
   const [user, profile] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true, headline: true },
+      select: { name: true, email: true, avatar: true, headline: true },
     }),
     prisma.linkedinProfile.findUnique({ where: { userId: sessionUser.id } }),
   ]);

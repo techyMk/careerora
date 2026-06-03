@@ -18,7 +18,7 @@ export default async function ResumesListPage() {
   const [user, resumes] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true },
+      select: { name: true, email: true, avatar: true },
     }),
     prisma.resume.findMany({
       where: { userId: sessionUser.id },

@@ -15,6 +15,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 type SidebarUser = {
@@ -50,13 +51,6 @@ export function Sidebar({
 
   const isActive = (item: (typeof NAV)[number]) =>
     item.exact ? pathname === item.href : pathname.startsWith(item.href);
-
-  const initials = (user.name || user.email)
-    .split(/\s+/)
-    .map((s) => s[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
 
   return (
     <aside className="hidden md:flex flex-col w-[260px] shrink-0 border-r border-white/5 bg-ink-950/40 p-4 sticky top-0 h-screen">
@@ -98,9 +92,7 @@ export function Sidebar({
 
       <div className="mt-auto space-y-3">
         <div className="flex items-center gap-2.5 p-2 rounded-xl glass">
-          <div className="size-8 rounded-full bg-brand-gradient flex items-center justify-center text-xs font-semibold">
-            {initials}
-          </div>
+          <Avatar src={user.avatar} name={user.name} email={user.email} size={32} />
           <div className="min-w-0 flex-1">
             <p className="text-xs font-medium truncate">
               {user.name ?? user.email.split("@")[0]}

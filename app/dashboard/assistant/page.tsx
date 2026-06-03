@@ -13,7 +13,7 @@ export default async function AssistantPage() {
   const [user, history] = await Promise.all([
     prisma.user.findUnique({
       where: { id: sessionUser.id },
-      select: { name: true, email: true },
+      select: { name: true, email: true, avatar: true },
     }),
     prisma.chatMessage.findMany({
       where: { userId: sessionUser.id },
