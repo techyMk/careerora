@@ -116,7 +116,7 @@ export default function PrivacyPage() {
 
       <h2>12. Contact</h2>
       <p>
-        Reach the team at <a href="mailto:privacy@careerora.app">privacy@careerora.app</a> for any data request — access, export, deletion, or general questions.
+        Reach out at <a href="mailto:techymk.dev@gmail.com">techymk.dev@gmail.com</a> for any data request — access, export, deletion, or general questions.
       </p>
     </LegalLayout>
   );

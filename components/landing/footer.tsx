@@ -84,7 +84,17 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-white/40">
           <p>© {new Date().getFullYear()} Careerora. All rights reserved.</p>
-          <p>Crafted with care · Made for people who refuse to look generic.</p>
+          <p>
+            Designed &amp; developed by{" "}
+            <a
+              href="https://techymk.vercel.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="gradient-text font-medium hover:underline underline-offset-4"
+            >
+              techyMk
+            </a>
+          </p>
         </div>
       </div>
     </footer>

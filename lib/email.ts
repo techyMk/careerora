@@ -2,7 +2,11 @@ import { Resend } from "resend";
 
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
-const FROM = process.env.EMAIL_FROM || "Careerora <hello@careerora.app>";
+// Resend requires a verified sender domain. Gmail addresses can't be used as From:.
+// Set EMAIL_FROM to "YourName <noreply@yourdomain.com>" once you verify a domain at
+// https://resend.com/domains. The default below uses Resend's sandbox sender.
+const FROM = process.env.EMAIL_FROM || "Careerora <onboarding@resend.dev>";
+const REPLY_TO = process.env.EMAIL_REPLY_TO || "techymk.dev@gmail.com";
 
 export const hasEmail = !!apiKey;
 
@@ -17,6 +21,7 @@ export async function sendEmail({ to, subject, html, text }: SendArgs) {
     const res = await resend.emails.send({
       from: FROM,
       to,
+      replyTo: REPLY_TO,
       subject,
       html,
       text,

@@ -98,7 +98,7 @@ export default function TermsPage() {
 
       <h2>11. Contact</h2>
       <p>
-        Questions? Reach us at <a href="mailto:hello@careerora.app">hello@careerora.app</a>.
+        Questions? Reach out at <a href="mailto:techymk.dev@gmail.com">techymk.dev@gmail.com</a>.
       </p>
     </LegalLayout>
   );
