@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { PortfolioEditor } from "@/components/dashboard/portfolio-editor";
+import type { PortfolioData } from "@/components/portfolio/portfolio-renderer";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,13 @@ export default async function PortfolioEditPage({
 
   if (!portfolio) notFound();
 
+  let data: PortfolioData = {};
+  try {
+    data = JSON.parse(portfolio.data);
+  } catch {
+    /* default empty */
+  }
+
   return (
     <PortfolioEditor
       user={user}
@@ -38,6 +46,8 @@ export default async function PortfolioEditPage({
         subdomain: portfolio.subdomain,
         bio: portfolio.bio,
         published: portfolio.published,
+        views: portfolio.views,
+        data,
       }}
     />
   );

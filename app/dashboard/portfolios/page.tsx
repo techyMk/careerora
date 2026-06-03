@@ -60,7 +60,7 @@ export default async function PortfoliosListPage() {
                       <div className="min-w-0">
                         <p className="text-sm font-medium truncate">{p.name}</p>
                         <p className="text-xs text-white/45 truncate">
-                          {p.subdomain}.careerora.app
+                          /p/{p.subdomain}
                         </p>
                       </div>
                       <span

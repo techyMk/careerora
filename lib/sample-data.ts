@@ -32,13 +32,35 @@ export const SAMPLE_RESUME_DATA = {
 };
 
 export const SAMPLE_PORTFOLIO_DATA = {
-  hero: "Hi, I'm here to design products people actually use.",
-  socials: { github: "", twitter: "", linkedin: "" },
+  hero: "I build products people actually use.",
+  about:
+    "I'm a multidisciplinary builder with a background in product, design, and engineering. Recently I've been focused on AI-native tools that help small teams ship faster without losing taste.",
+  skills: ["Product", "Design systems", "Next.js", "TypeScript", "AI tools"],
   projects: [
-    { name: "Plume", tagline: "Analytics redesign", color: "from-brand-blue/40 to-brand-violet/40" },
-    { name: "Northwind", tagline: "Brand refresh", color: "from-brand-violet/40 to-brand-pink/40" },
-    { name: "Lumen", tagline: "Mobile onboarding", color: "from-brand-cyan/40 to-brand-blue/40" },
+    {
+      id: "p1",
+      name: "Plume Analytics",
+      description: "Led a 6-week redesign that lifted activation +38% and unlocked a $1.4M ARR enterprise tier.",
+      url: "https://example.com",
+      tags: ["Product design", "Data viz"],
+    },
+    {
+      id: "p2",
+      name: "Northwind brand refresh",
+      description: "New wordmark, motion language and marketing site. Shipped in 4 weeks.",
+      url: "",
+      tags: ["Brand", "Motion"],
+    },
+    {
+      id: "p3",
+      name: "Lumen onboarding",
+      description: "Mobile-first onboarding flow that improved trial → paid 22% → 31%.",
+      url: "",
+      tags: ["Mobile", "Growth"],
+    },
   ],
+  socials: { github: "", twitter: "", linkedin: "", website: "" },
+  contact: { email: "" },
 };
 
 const slugify = (s: string) =>
