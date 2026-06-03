@@ -29,13 +29,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  resumes         Resume[]
-  portfolios      Portfolio[]
-  caseStudies     CaseStudy[]
-  coverLetters    CoverLetter[]
-  linkedinProfile LinkedinProfile?
-  chatMessages    ChatMessage[]
-  notifications   Notification[]
+  resumes           Resume[]
+  portfolios        Portfolio[]
+  caseStudies       CaseStudy[]
+  coverLetters      CoverLetter[]
+  linkedinProfile   LinkedinProfile?
+  chatMessages      ChatMessage[]
+  notifications     Notification[]
+  interviewSessions InterviewSession[]
 }
 
 model Resume {
@@ -53,18 +54,53 @@ model Resume {
 }
 
 model Portfolio {
-  id        String   @id @default(cuid())
-  userId    String
-  name      String
-  theme     String   @default("gradient")
-  subdomain String   @unique
-  bio       String
-  data      String   // JSON
-  published Boolean  @default(false)
-  views     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  userId         String
+  name           String
+  theme          String   @default("gradient")
+  subdomain      String   @unique
+  bio            String
+  data           String   // JSON
+  published      Boolean  @default(false)
+  views          Int      @default(0)
+  customDomain   String?  @unique
+  domainVerified Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  viewLog        PortfolioView[]
+
+  @@index([userId])
+}
+
+model PortfolioView {
+  id          String    @id @default(cuid())
+  portfolioId String
+  country     String?
+  referrer    String?
+  userAgent   String?
+  dwellMs     Int       @default(0)
+  scrollPct   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, createdAt])
+  @@index([createdAt])
+}
+
+model InterviewSession {
+  id            String   @id @default(cuid())
+  userId        String
+  role          String
+  level         String   // junior | mid | senior | staff
+  questionCount Int      @default(5)
+  questions     String   @default("[]") // JSON: [{question, answer, score, feedback}]
+  status        String   @default("active") // active | completed
+  finalScore    Int?
+  finalReport   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

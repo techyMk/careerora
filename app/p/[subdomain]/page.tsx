@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import {
   PortfolioRenderer,
   type PortfolioData,
 } from "@/components/portfolio/portfolio-renderer";
+import { DwellBeacon } from "@/components/portfolio/dwell-beacon";
 
 export const dynamic = "force-dynamic";
 
@@ -46,37 +48,48 @@ export default async function PublicPortfolioPage({
   const portfolio = await getPortfolio(subdomain);
   if (!portfolio) notFound();
 
-  // Drafts are visible to the owner only (for previews).
-  if (!portfolio.published) {
-    const session = await auth();
-    const sessionUser = session?.user as { id?: string } | undefined;
-    if (sessionUser?.id !== portfolio.userId) notFound();
-  }
+  const session = await auth();
+  const sessionUser = session?.user as { id?: string } | undefined;
+  const isOwner = sessionUser?.id === portfolio.userId;
+
+  // Drafts visible to the owner only
+  if (!portfolio.published && !isOwner) notFound();
 
   let data: PortfolioData = {};
   try {
     data = JSON.parse(portfolio.data);
-  } catch {
-    /* empty */
-  }
+  } catch { /* empty */ }
 
-  // Track views for non-owners only — fire and forget.
-  const session = await auth();
-  const sessionUser = session?.user as { id?: string } | undefined;
-  if (sessionUser?.id !== portfolio.userId) {
-    prisma.portfolio
-      .update({ where: { id: portfolio.id }, data: { views: { increment: 1 } } })
-      .catch(() => {});
-    // Notify the owner (debounce naive: only on every Nth view)
-    if ((portfolio.views + 1) % 5 === 1) {
-      const { notify } = await import("@/lib/notifications");
-      notify(portfolio.userId, {
-        type: "portfolio_view",
-        title: `Someone viewed your portfolio`,
-        body: `${portfolio.name} just hit ${portfolio.views + 1} total views.`,
-        link: `/dashboard/portfolios/${portfolio.id}`,
-      }).catch(() => {});
-    }
+  // Record a real view event for non-owners
+  let viewId: string | null = null;
+  if (!isOwner) {
+    const h = await headers();
+    const country = h.get("x-vercel-ip-country") || h.get("cf-ipcountry") || null;
+    const referrer = h.get("referer") || null;
+    const userAgent = h.get("user-agent")?.slice(0, 240) || null;
+
+    try {
+      const view = await prisma.portfolioView.create({
+        data: { portfolioId: portfolio.id, country, referrer, userAgent },
+        select: { id: true },
+      });
+      viewId = view.id;
+      // keep the lightweight aggregate counter in sync
+      await prisma.portfolio.update({
+        where: { id: portfolio.id },
+        data: { views: { increment: 1 } },
+      });
+      // Notify the owner — debounced to every 5th view
+      if ((portfolio.views + 1) % 5 === 1) {
+        const { notify } = await import("@/lib/notifications");
+        notify(portfolio.userId, {
+          type: "portfolio_view",
+          title: `Someone viewed your portfolio`,
+          body: `${portfolio.name} just hit ${portfolio.views + 1} total views.`,
+          link: `/dashboard/portfolios/${portfolio.id}`,
+        }).catch(() => {});
+      }
+    } catch { /* swallow */ }
   }
 
   return (
@@ -96,6 +109,7 @@ export default async function PublicPortfolioPage({
         }}
         data={data}
       />
+      {viewId && <DwellBeacon viewId={viewId} portfolioId={portfolio.id} />}
     </main>
   );
 }

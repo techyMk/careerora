@@ -14,6 +14,8 @@ import {
   LayoutTemplate,
   Settings,
   LogOut,
+  BarChart3,
+  Briefcase,
 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
@@ -46,7 +48,9 @@ export function Sidebar({
   ];
 
   const TOOLS = [
-    { href: "/dashboard/assistant", label: "AI Assistant", icon: Wand2, badge: "New" },
+    { href: "/dashboard/assistant", label: "AI Assistant", icon: Wand2 },
+    { href: "/dashboard/interview", label: "Mock Interview", icon: Briefcase, badge: "New" },
+    { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
     { href: "/dashboard/templates", label: "Templates", icon: LayoutTemplate },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
   ];

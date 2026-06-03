@@ -29,6 +29,7 @@ import {
   type PortfolioData,
   type PortfolioProject,
 } from "@/components/portfolio/portfolio-renderer";
+import { CustomDomainPanel } from "@/components/dashboard/custom-domain";
 import { cn } from "@/lib/utils";
 
 const THEMES = [
@@ -54,6 +55,8 @@ type PortfolioProp = {
   bio: string;
   published: boolean;
   views: number;
+  customDomain: string | null;
+  domainVerified: boolean;
   data: PortfolioData;
 };
 
@@ -557,6 +560,15 @@ export function PortfolioEditor({
                 placeholder="you.dev"
               />
             </Section>
+
+            {/* Custom domain */}
+            <CustomDomainPanel
+              portfolioId={portfolio.id}
+              initial={{
+                customDomain: portfolio.customDomain,
+                domainVerified: portfolio.domainVerified,
+              }}
+            />
 
             {/* Theme */}
             <Section title="Theme">

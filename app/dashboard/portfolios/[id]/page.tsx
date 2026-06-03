@@ -47,6 +47,8 @@ export default async function PortfolioEditPage({
         bio: portfolio.bio,
         published: portfolio.published,
         views: portfolio.views,
+        customDomain: portfolio.customDomain,
+        domainVerified: portfolio.domainVerified,
         data,
       }}
     />
