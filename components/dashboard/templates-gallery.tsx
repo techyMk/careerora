@@ -48,7 +48,7 @@ export function TemplatesGallery({
 
   const useTemplate = async (t: Template) => {
     if (t.tier === "Pro" && !isPro) {
-      router.push("/dashboard/settings");
+      router.push("/dashboard/settings?tab=billing");
       return;
     }
     setBusy(t.id);
@@ -174,7 +174,7 @@ export function TemplatesGallery({
             </div>
             <Button
               size="sm"
-              onClick={() => router.push("/dashboard/settings")}
+              onClick={() => router.push("/dashboard/settings?tab=billing")}
             >
               <Crown className="size-3.5" />
               Upgrade to Pro

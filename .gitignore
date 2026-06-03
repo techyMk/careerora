@@ -11,3 +11,12 @@ prisma/dev.db
 prisma/dev.db-journal
 *.sqlite
 *.sqlite-journal
+
+# AI agents / IDE assistants
+.claude/
+.cursor/
+.aider*
+CLAUDE.md
+AGENTS.md
+.windsurfrules
+

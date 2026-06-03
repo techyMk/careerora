@@ -20,6 +20,12 @@ model User {
   phone     String?
   bio       String?
   plan      String   @default("free")
+  // ─── Stripe billing ───
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  planStatus           String?   // active | trialing | past_due | canceled | unpaid
+  planRenewsAt         DateTime?
+  // ─────────────────────
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
