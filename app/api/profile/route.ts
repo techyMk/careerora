@@ -34,6 +34,9 @@ const schema = z.object({
   website: z.string().max(200).optional(),
   phone: z.string().max(40).optional(),
   bio: z.string().max(2000).optional(),
+  // Either a remote URL (Google avatar), a data URL after client-side resize,
+  // or null to remove the current photo. Capped at ~200KB.
+  avatar: z.string().max(200_000).nullable().optional(),
   notificationPrefs: z
     .object({
       profileViews: z.boolean(),

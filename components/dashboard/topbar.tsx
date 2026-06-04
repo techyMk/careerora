@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Wand2, Search, Command } from "lucide-react";
+import { Wand2, Search, Command, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
+import { MOBILE_SIDEBAR_EVENT } from "@/components/dashboard/sidebar";
 
 export function Topbar({
   title,
@@ -22,15 +23,26 @@ export function Topbar({
   const router = useRouter();
 
   const triggerSearch = () => {
-    // dispatch a fake ⌘K so the global palette opens
     window.dispatchEvent(
       new KeyboardEvent("keydown", { key: "k", metaKey: true, ctrlKey: true })
     );
   };
 
+  const toggleMobileNav = () => {
+    window.dispatchEvent(new CustomEvent(MOBILE_SIDEBAR_EVENT));
+  };
+
   return (
     <header className="sticky top-0 z-30 backdrop-blur-xl bg-ink-950/60 border-b border-white/5">
-      <div className="flex items-center gap-4 px-5 md:px-8 h-16">
+      <div className="flex items-center gap-3 md:gap-4 px-4 md:px-8 h-16">
+        <button
+          onClick={toggleMobileNav}
+          aria-label="Open menu"
+          className="md:hidden size-9 rounded-full glass flex items-center justify-center shrink-0"
+        >
+          <Menu className="size-4" />
+        </button>
+
         <div className="min-w-0 flex-1">
           <h1 className="text-base md:text-lg font-semibold tracking-tight truncate">
             {title}
@@ -51,6 +63,13 @@ export function Topbar({
               <Command className="size-2.5" />K
             </span>
           </button>
+          <button
+            onClick={triggerSearch}
+            aria-label="Search"
+            className="md:hidden size-9 rounded-full glass flex items-center justify-center"
+          >
+            <Search className="size-3.5" />
+          </button>
           <Button
             size="sm"
             variant="secondary"
@@ -63,7 +82,7 @@ export function Topbar({
           <NotificationBell />
           <button
             onClick={() => router.push("/dashboard/settings")}
-            className="rounded-full hover:scale-105 transition-transform"
+            className="rounded-full hover:scale-105 transition-transform shrink-0"
             title="Account settings"
           >
             <Avatar

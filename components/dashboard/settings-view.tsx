@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Topbar } from "@/components/dashboard/topbar";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
+import { AvatarUpload } from "@/components/dashboard/avatar-upload";
 import { cn } from "@/lib/utils";
 
 type Profile = {
@@ -202,13 +202,12 @@ function ProfileTab({
       <p className="text-xs text-white/55">
         Your public identity across all Careerora assets.
       </p>
-      <div className="mt-5 flex items-center gap-4">
-        <Avatar src={user.avatar} name={form.name} email={user.email} size={64} />
-        <div>
-          <p className="text-sm font-medium">{user.email}</p>
-          <p className="text-xs text-white/45 capitalize">
-            {user.plan ?? "free"} plan
-          </p>
+      <div className="mt-5 space-y-4">
+        <AvatarUpload src={user.avatar} name={form.name} email={user.email} />
+        <div className="text-xs text-white/55 inline-flex items-center gap-2">
+          <span>{user.email}</span>
+          <span className="text-white/25">·</span>
+          <span className="capitalize">{user.plan ?? "free"} plan</span>
         </div>
       </div>
       <div className="mt-5 grid md:grid-cols-2 gap-3">

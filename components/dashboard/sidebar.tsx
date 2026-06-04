@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   FileText,
@@ -17,9 +19,12 @@ import {
   LogOut,
   BarChart3,
   Briefcase,
+  X,
 } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+
+export const MOBILE_SIDEBAR_EVENT = "careerora:mobile-sidebar-toggle";
 
 type SidebarUser = {
   id: string;
@@ -37,7 +42,78 @@ export function Sidebar({
   counts: { resumes: number; portfolios: number; coverLetters: number };
 }) {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Topbar dispatches this event to open the drawer
+  useEffect(() => {
+    const onToggle = () => setMobileOpen((v) => !v);
+    window.addEventListener(MOBILE_SIDEBAR_EVENT, onToggle);
+    return () => window.removeEventListener(MOBILE_SIDEBAR_EVENT, onToggle);
+  }, []);
+
+  // Close on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll while open
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = prev; };
+    }
+  }, [mobileOpen]);
+
+  return (
+    <>
+      <aside className="hidden md:flex flex-col w-[260px] shrink-0 border-r border-white/5 bg-ink-950/40 p-4 sticky top-0 h-screen">
+        <NavBody user={user} counts={counts} pathname={pathname} />
+      </aside>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="md:hidden fixed inset-0 z-40 bg-ink-950/70 backdrop-blur-sm"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden fixed inset-y-0 left-0 z-50 w-[88%] max-w-[300px] bg-ink-950 border-r border-white/10 p-4 flex flex-col overflow-y-auto"
+            >
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                className="absolute top-3 right-3 size-9 rounded-full glass flex items-center justify-center"
+              >
+                <X className="size-4" />
+              </button>
+              <NavBody user={user} counts={counts} pathname={pathname} />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+function NavBody({
+  user,
+  counts,
+  pathname,
+}: {
+  user: SidebarUser;
+  counts: { resumes: number; portfolios: number; coverLetters: number };
+  pathname: string;
+}) {
   const NAV = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { href: "/dashboard/resumes", label: "Resumes", icon: FileText, count: counts.resumes },
@@ -59,7 +135,7 @@ export function Sidebar({
     item.exact ? pathname === item.href : pathname.startsWith(item.href);
 
   return (
-    <aside className="hidden md:flex flex-col w-[260px] shrink-0 border-r border-white/5 bg-ink-950/40 p-4 sticky top-0 h-screen">
+    <>
       <Link
         href="/dashboard"
         aria-label="Careerora"
@@ -107,7 +183,7 @@ export function Sidebar({
         ))}
       </nav>
 
-      <div className="mt-auto space-y-3">
+      <div className="mt-auto space-y-3 pt-6">
         <div className="flex items-center gap-2.5 p-2 rounded-xl glass">
           <Avatar src={user.avatar} name={user.name} email={user.email} size={32} />
           <div className="min-w-0 flex-1">
@@ -127,7 +203,7 @@ export function Sidebar({
           </button>
         </div>
       </div>
-    </aside>
+    </>
   );
 }
 
